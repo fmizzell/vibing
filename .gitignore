@@ -1,0 +1,13 @@
+# IDE
+.idea/
+*.swp
+*.swo
+
+# Binaries
+farm-vibes
+*.exe
+*.test
+
+# OS
+.DS_Store
+Thumbs.db
