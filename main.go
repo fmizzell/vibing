@@ -63,7 +63,28 @@ func NewGame() *Game {
 
 func (g *Game) DisplayFarm() {
 	fmt.Printf("\n=== Farm Vibes ===\n")
-	fmt.Printf("Day %d | Money: $%d | Energy: %d/10\n\n", g.Player.Day, g.Player.Money, g.Player.Energy)
+	fmt.Printf("Day %d | Money: $%d | Energy: %d/10\n", g.Player.Day, g.Player.Money, g.Player.Energy)
+	
+	// Display inventory
+	fmt.Print("Seeds: ")
+	if len(g.Player.Seeds) == 0 {
+		fmt.Print("None")
+	} else {
+		first := true
+		for cropType, quantity := range g.Player.Seeds {
+			if quantity > 0 {
+				if !first {
+					fmt.Print(", ")
+				}
+				fmt.Printf("%s:%d", cropType, quantity)
+				first = false
+			}
+		}
+		if first {
+			fmt.Print("None")
+		}
+	}
+	fmt.Println()
 
 	fmt.Println("Your Farm:")
 	for i := 0; i < 5; i++ {
@@ -72,7 +93,11 @@ func (g *Game) DisplayFarm() {
 			if !plot.IsPlanted {
 				fmt.Print(". ")
 			} else if plot.DaysLeft > 0 {
-				fmt.Print("^ ")
+				if plot.Watered {
+					fmt.Print("~ ") // Watered growing crop
+				} else {
+					fmt.Print("^ ") // Unwatered growing crop
+				}
 			} else {
 				cropInfo := Crops[plot.Crop]
 				fmt.Printf("%s ", cropInfo.DisplayChar)
@@ -80,6 +105,9 @@ func (g *Game) DisplayFarm() {
 		}
 		fmt.Println()
 	}
+	
+	// Legend
+	fmt.Println("\nLegend: . = empty, ^ = growing (needs water), ~ = growing (watered), C/T/O = ready to harvest")
 }
 
 func (g *Game) ShowActions() {
